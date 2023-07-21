@@ -1,0 +1,124 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node{
+    int data;
+    Node* left, *right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+};
+
+void inorder(Node* root)
+{
+    stack<Node *> s;
+    while(true)
+    {
+        if(root!=NULL)
+        {
+            s.push(root);
+            root=root->left;
+            
+        }
+        else{
+            if(s.empty())
+            {
+                break;
+            }
+            root=s.top();
+            cout<<root->data<<" ";
+            s.pop();
+            root=root->right;
+        }
+    }
+}
+
+void preorder(Node *root)
+{
+    stack<Node*> s;
+    s.push(root);
+    while(!s.empty() )
+    {
+        Node* t=s.top();
+          cout<<t->data<<" ";
+          s.pop();
+          
+          if(t->right!=NULL)
+          {
+              s.push(t->right);
+          }
+          if(t->left!=NULL)
+          {
+              s.push(t->left);
+          }
+    }
+  
+    
+}
+
+void postorder(Node* root)
+{
+    if(root==NULL)
+    {
+        return;
+    }
+      stack<Node*> s;
+      while(root!=NULL || !s.empty() )
+      {
+          if(root!=NULL)
+          {
+             s.push(root);
+             root=root->left;
+          }
+          else{
+              Node* t=s.top()->right;
+              if(t==NULL)
+              {
+                      t=s.top();
+                      s.pop();
+                     cout<<t->data<<" ";
+                  while(!s.empty() && t==s.top()->right)
+                  {
+                      t=s.top();
+                      s.pop();
+                    cout<<t->data<<" ";
+                      
+                  }
+              }
+              else{
+                  root=t;
+              }
+          }
+      }
+    
+}
+int main() {
+    // Write C++ code here
+    struct Node *root=new Node(1);
+    root->left=new Node(2);
+    root->right=new Node(3);
+    root->left->left=new Node(4);
+    root->left->right=new Node(5);
+    root->right->left=new Node(6);
+    root->right->right=new Node(7);
+    
+    /*
+        1
+       /   \ 
+       2    3 
+      / \   / \
+      4  5  6  7
+    */
+    cout<<"INORDER:  ";
+    inorder(root);
+    cout<<"\n PREORDER:  ";
+    preorder(root);
+     cout<<"\n PREORDER:  ";
+    postorder(root);
+
+    return 0;
+}

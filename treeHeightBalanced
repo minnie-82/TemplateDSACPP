@@ -1,0 +1,140 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/* Check if the Binary Tree is Balanced Binary Tree
+1. Solution 1: Naive approach
+
+Intuition + Approach: 
+
+For a Balanced Binary Tree, Check left subtree height and right subtree height for every node present in the tree. Hence, traverse the tree recursively and calculate the height of left and right subtree from every node, and whenever the condition of Balanced tree violates, simply return false.
+
+Condition for Balanced Binary Tree
+
+For all Nodes , Absolute( Left Subtree Height – Right Subtree Height ) <= 1
+
+ O(N^2)  Space Complexity: O(1) ( Extra Space ) + O(H) ( Recursive Stack Space where “H” is the height of tree )
+ 
+ 
+2. Solution 2: Post Order Traversal
+
+Intuition: Can we optimize the above brute force solution? Which operation do you think can be skipped to optimize the time complexity?
+
+Ain’t we traversing the subtrees again and again in the above example?
+
+Yes, so can we skip the repeated traversals?
+
+What if we can make use of post-order traversal?
+
+So, the idea is to use post-order traversal. Since, in postorder traversal, we first traverse the left and right subtrees and then visit the parent node, similarly instead of calculating the height of the left subtree and right subtree every time at the root node, use post-order traversal, and keep calculating the heights of the left and right subtrees and perform the validation 
+
+ O(N)  Space Complexity: O(1) ( Extra Space ) + O(H) ( Recursive Stack Space where “H” is the height of tree ) */
+
+
+struct Node{
+    int data;
+    struct Node *left, *right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+    
+    
+};
+
+/*Approach 1 */
+int height(Node*root)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+    int l=height(root->left);
+    int r=height(root->right);
+    
+    return 1+max(l,r);
+}
+
+bool app1(Node* root)
+{
+    if(root==NULL)
+    {
+        return true;
+    }
+     int l=height(root->left);
+     int r=height(root->right);
+     if(abs(l-r)<=1 && app1(root->left) && app1(root->right))
+     {
+         return true;
+     }
+    return false;
+    
+}
+
+/*APPROACH 2*/
+int postTheight(Node*root)
+{
+    if(root==NULL)
+    {
+        return 1;
+    }
+    int l=postTheight(root->left);
+    if(l==-1)
+    {
+        return -1;
+    }
+    int r=postTheight(root->right);
+    if(r==-1)
+    {
+        return -1;
+    }
+    
+    if(abs(l-r)>1 )
+    {
+        return -1;
+    }
+     
+    return 1 +max(l,r);
+}
+
+bool app2(Node* root)
+{
+    return postTheight(root)!=-1;
+}
+
+int main() {
+    // Write C++ code here
+   struct Node *root=new Node(1);
+    root->left=new Node(2);
+    root->right=new Node(3);
+    root->left->left=new Node(4);
+   root->left->right=new Node(5);
+    root->right->left=new Node(6);
+    // root->right->left->left=new Node(8);
+    // root->right->left->right=new Node(8);
+    
+    root->right->right= new Node(7);
+    
+     /*Approach 1*/
+     cout<<"The Binary Tree is Balanced Using Approach 1 : ";
+     if(app1(root)){
+         cout<<" BALANCED ";
+     }
+     else{
+         cout<<" NOT BALANCED";
+     }
+     
+  
+      /*Approach 2*/
+    cout<<"\n The Binary Tree is Balanced Using Approach 2 : ";
+     if(app2(root)){
+         cout<<" BALANCED ";
+     }
+     else{
+         cout<<" NOT BALANCED";
+     }
+
+    return 0;
+}

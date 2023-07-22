@@ -1,0 +1,90 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/* MAXIMUM DEPTH YA HEIGHT OF TREE
+1. Using Level Order Traversal= O(N) O(N)
+2. Using Recursion : O(N) O(1)*/
+
+
+struct Node{
+    int data;
+    struct Node *left, *right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+    
+    
+};
+
+/*Approach 1 Level order O(N) O(N)*/
+int usingLOL(Node* root)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+    queue<Node*> q;
+    q.push(root);
+    int level=0;
+    while(!q.empty())
+    {
+        int size=q.size();
+        
+        while(size--)
+        {
+            Node* t=q.front();
+            q.pop();
+            if(t->left!=NULL)
+            {
+                q.push(t->left);
+                
+            }
+            if(t->right!=NULL)
+            {
+                q.push(t->right);
+            }
+            
+        }
+        level++;
+    }
+    return level;
+    
+}
+
+int usingRecursion(Node* root)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+    
+    int l=usingRecursion(root->left);
+    int h=usingRecursion(root->right);
+    
+    return 1 + max(l,h);
+}
+
+int main() {
+    // Write C++ code here
+   struct Node *root=new Node(1);
+    root->left=new Node(2);
+    root->right=new Node(3);
+    root->left->left=new Node(4);
+    root->left->right=new Node(5);
+    root->right->left=new Node(6);
+    root->right->right= new Node(7);
+    
+     /*Approach 1*/
+     cout<<"The Maximum Height or Depth of Tree Using Approach 1 : ";
+     cout<<usingLOL(root);
+  
+      /*Approach 2*/
+     cout<<"\n The Maximum Height or Depth of Tree Using Approach 2 : ";
+     cout<<usingRecursion(root);
+
+    return 0;
+}

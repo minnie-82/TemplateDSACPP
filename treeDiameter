@@ -1,0 +1,123 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/* Calculate the Diameter of a Binary Tree
+1. Solution 1: Naive approach
+
+
+Intuition :
+
+The idea is to consider every node as a Curving Point in diameter. For our understanding, we can define the curving point as the node on the diameter path which has the maximum height. In the above examples, the Curving Point is node 4 in Example 1 and node 8 in Example 2.
+
+Now, if we observe carefully, we can see that diameter of the tree can be defined as left subtree height + right subtree height from the Curving Point.
+
+So, the idea to find the Curving Point is, consider every node in the tree as a curving point and calculate the diameter for every curving point and return the maximum of all diameters.
+
+Diameter at given Curving Point = Left Height + Right Height
+
+ O(N^2)  Space Complexity: O(1) ( Extra Space ) + O(H) ( Recursive Stack Space where “H” is the height of tree )
+ 
+ 
+2. Solution 2: Post Order Traversal
+
+
+
+Intuition :
+
+Is it possible to optimize the above solution further? Which operation do you think is very repetitive in nature in the above solution?
+
+💡 Height of the subtrees.
+
+Can we use postorder traversal to calculate everything in a single traversal of the tree?
+
+Yes, as in post-order traversal, we have to completely traverse the left and right subtree before visiting the root node.
+
+So, the idea is to use post-order traversal and keep calculating the height of the left and right subtrees. Once we have the heights at the current node, we can easily calculate both the diameter and height of the current node.
+
+ O(N)  Space Complexity: O(1) ( Extra Space ) + O(H) ( Recursive Stack Space where “H” is the height of tree ) */
+
+
+struct Node{
+    int data;
+    struct Node *left, *right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+    
+    
+};
+
+/*Approach 1 */
+int height(Node*root)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+    int l=height(root->left);
+    int r=height(root->right);
+    
+    return 1+max(l,r);
+}
+
+int  app1(Node* root)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+     int l=height(root->left);
+     int r=height(root->right);
+    
+    int ld=app1(root->left);
+    int rd=app1(root->right);
+    return max(l+r, max(ld, rd));
+    
+}
+
+/*APPROACH 2*/
+int postTheight(Node*root , int &diameter)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+    int l=postTheight(root->left,diameter);
+    int r=postTheight(root->right,diameter);
+    
+  diameter=max(diameter, l+r);
+     
+    return 1 + max(l,r);
+}
+
+int app2(Node* root)
+{
+    int diameter=0;
+    postTheight(root,diameter);
+    
+    return diameter;
+}
+
+int main() {
+    // Write C++ code here
+   struct Node *root=new Node(1);
+    root->left=new Node(2);
+    root->right=new Node(3);
+    root->left->left=new Node(4);
+   root->left->right=new Node(5);
+    
+    
+     /*Approach 1*/
+     cout<<"The Diameter of Binary Tree using Approach 1 : "<<app1(root);
+    
+  
+      /*Approach 2*/
+    cout<<"\n The Diameter of Binary Tree using Approach 2 : "<<app2(root);
+     
+
+    return 0;
+}

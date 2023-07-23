@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/*  MAXIMUM SUM PATH
+
+We first need to define what is the maximum path sum through a given node (when that node is acting as the root node/curving point). At a given node with a value, if we find the max leftSumPath in the left-subtree and the max rightSumPath in the right subtree, then the maxPathSum through that node is value+(leftSumPath+rightSumPath).
+
+Now we can apply this formula at every node by doing a simple tree traversal and storing the maximum value (our answer) in a reference variable.
+
+For our recursion to work, it is very important to understand what value we return from our function. In our recursive function, we find and compare the maxPathSum from a given node when it is the root/turning point of the path. But what we return is the maxPathSum of that same node when it is NOT the root/turning point of the path. To find the latter maxPath, we no longer have the liberty to consider both leftMaxPath and rightMaxPath, we will simply take the maximum of the two and it to the value of the node.
+
+Time Complexity: O(N).
+
+Reason: We are doing a tree traversal.
+
+Space Complexity: O(N)
+
+Reason: Space is needed for the recursion stack. In the worst case (skewed tree), space complexity can be O(N).*/
+
+
+struct Node{
+    int data;
+    struct Node *left, *right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+    
+    
+};
+
+int findPathSum(Node*root, int & ans)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+    int l=max(0,findPathSum(root->left,ans));
+    int r=max(0,findPathSum(root->right,ans));
+    
+    int val=root->data;
+    
+    ans=max(ans,l+r+val);
+    
+    
+    return  max(l,r)+val;
+}
+
+int maxPathSum(Node* root)
+{
+    int ans=INT_MIN;
+    findPathSum(root,ans);
+    return ans;
+}
+
+int main() {
+    // Write C++ code here
+   struct Node *root=new Node(-10);
+    root->left=new Node(9);
+    root->right=new Node(20);
+    root->right->left=new Node(15);
+    root->right->right= new Node(7);
+    
+     
+   cout<<"The Maximum Path Sum : "<< maxPathSum(root);
+    return 0;
+}

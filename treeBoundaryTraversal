@@ -1,0 +1,105 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/* Boundary Traversal of a Binary Tree
+Approach: Boundary traversal in an anti-clockwise direction can be described as a traversal consisting of three parts:
+
+Part 1: Left Boundary of the tree (excluding the leaf nodes).
+Part 2: All the leaf nodes travelled in the left to right direction.
+Part 3: Right Boundary of the tree (excluding the leaf nodes), traversed in the reverse direction.
+We take a simple data structure like a vector/Arraylist to store the Boundary Traversal. The root node is coming from both the boundaries (left and right). Therefore, to avoid any confusion, we push it on our list at the very st
+
+Time Complexity: O(N).
+
+Reason: The time complexity will be O(H) + O(H) + O(N) which is ≈ O(N)
+
+Space Complexity: O(N)
+
+Reason: Space is needed for the recursion stack while adding leaves. In the worst case (skewed tree), space complexity can be O(N).*/
+
+
+struct Node{
+    int data;
+    struct Node *left, *right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+    
+    
+};
+
+bool isLeaf(Node * root) {
+  return !root -> left && !root -> right;
+}
+
+void addLeftBoundary(Node * root, vector < int > & res) {
+  Node * cur = root -> left;
+  while (cur) {
+    if (!isLeaf(cur)) res.push_back(cur -> data);
+    if (cur -> left) cur = cur -> left;
+    else cur = cur -> right;
+  }
+}
+void addRightBoundary(Node * root, vector < int > & res) {
+  Node * cur = root -> right;
+  vector < int > tmp;
+  while (cur) {
+    if (!isLeaf(cur)) tmp.push_back(cur -> data);
+    if (cur -> right) cur = cur -> right;
+    else cur = cur -> left;
+  }
+  for (int i = tmp.size() - 1; i >= 0; --i) {
+    res.push_back(tmp[i]);
+  }
+}
+
+void addLeaves(Node * root, vector < int > & res) {
+  if (isLeaf(root)) {
+    res.push_back(root -> data);
+    return;
+  }
+  if (root -> left) addLeaves(root -> left, res);
+  if (root -> right) addLeaves(root -> right, res);
+}
+
+vector < int > BoundaryTraversal(Node * root) {
+  vector < int > res;
+  if (!root) return res;
+
+  if (!isLeaf(root)) res.push_back(root -> data);
+
+  addLeftBoundary(root, res);
+
+  // add leaf nodes
+  addLeaves(root, res);
+
+  addRightBoundary(root, res);
+  return res;
+}
+
+
+int main() {
+    // Write C++ code here
+   struct Node *root=new Node(1);
+    root->left=new Node(2);
+    root->right=new Node(3);
+    root->left->left=new Node(4);
+    root->left->right=new Node(5);
+    root->left->right->left=new Node(8);
+    root->left->right->right=new Node(9);
+    root->right->left=new Node(6);
+    root->right->right= new Node(7);
+    
+     cout<<"Boundary Traversal : ";
+     vector<int> res=BoundaryTraversal(root);
+     for(auto i:res)
+     {
+         cout<<i<<" ";
+     }
+
+    return 0;
+}

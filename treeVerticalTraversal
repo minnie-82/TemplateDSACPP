@@ -4,41 +4,59 @@
 // Time Complexity: O(N*logN*logN*logN)
 
 // Space Complexity: O(N)
-    vector<vector<int>> verticalTraversal(TreeNode* root) {
-       
-        //Your code here
-        map<int,map<int,vector<int>>>nodes;
-        queue<pair<TreeNode*,pair<int,int>>>qe;
+  
+// Time Complexity: O(N*logN*logN*logN)
 
-         qe.push({root,{0,0}});
-         while(!qe.empty()){
-             auto p=qe.front();
-             qe.pop();
-             TreeNode*node=p.first;
-             int x=p.second.first;
-             int y=p.second.second;
-             nodes[x][y].push_back(node->val);
-             if(node->left){
-                 qe.push({node->left,{x-1,y+1}});
-             }
-             if(node->right){
-                 qe.push({node->right,{x+1,y+1}});
-             }
-         }
-         vector<vector<int>>ans;
-         for(auto p:nodes){
-             vector<int> v;
-             for(auto q:p.second){
-                 v.insert(v.end(),q.second.begin(),q.second.end());
-             }
-             ans.push_back(v);
-         }
-    return ans;
+// Space Complexity: O(N)
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        map<int,map<int, multiset<int>> >nodes; // vertical, level, node values => 0->0->3;
+
+        queue<pair<TreeNode*, pair<int,int>>> q;  // Node, (vertical,level)
+
+        q.push({root, {0,0}});
+
+
+        while(!q.empty())
+        {
+            auto p=q.front();
+            q.pop();
+
+            TreeNode *t=p.first;
+
+            int x=p.second.first, y=p.second.second; //vertical , level;
+
+            nodes[x][y].insert(t->val);   // 0,0=  3; vertical, level, value;
+            
+            if(t->left)
+            {
+                q.push({t->left,{x-1, y+1} });
+            }
+
+            if(t->right)
+            {
+                q.push({t->right,{x+1, y+1} });
+            }
+            
+    }
+
+    vector<vector<int>> ans;
+
+    for(auto i: nodes)
+    {
+        vector<int> v;
+        for(auto j: i.second)
+        {
+            v.insert(v.end(),j.second.begin(),j.second.end());  // node values;
+        }
+                ans.push_back(v);
+    }
+        return ans;
     }
 
 
 
-//gfg Vertical Order Traversal  O(N) O(N)
+//gfg 
+//Vertical Order Traversal  O(N) O(N)
 vector<int> verticalOrder(Node *root){
         //Your code here
         map<int,map<int,vector<int>>>nodes;

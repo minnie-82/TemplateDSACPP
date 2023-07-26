@@ -1,0 +1,92 @@
+
+//Leetcode 
+//Time Complexity: O(N)   
+
+//Space Complexity: O(N)
+vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> ans;
+         
+         if(root==NULL)
+         {
+             return ans;
+         }
+        queue<TreeNode*> q;
+        q.push(root);
+int c=1;
+        while(!q.empty())
+        {
+            vector<int> l;
+            int size=q.size();
+
+            while(size--)
+            {
+                TreeNode* t=q.front();
+                q.pop();
+                if(t->left!=NULL)
+                {
+                    q.push(t->left);
+                }
+                if(t->right!=NULL)
+                {
+                    q.push(t->right);
+                }
+                l.push_back(t->val);
+            }
+            if(c%2==0)
+            {
+                reverse(l.begin(),l.end());
+            }
+            c++;
+            ans.push_back(l);
+        }
+        return ans;
+    }
+
+
+//gfg
+
+ vector <int> zigZagTraversal(Node* root)
+    
+    
+    {
+        vector<int> ans;
+        if(root==NULL)
+         {
+             return ans;
+         }
+        queue<Node*> q;
+        q.push(root);
+int c=1;
+        while(!q.empty())
+        {
+            vector<int> l;
+            int size=q.size();
+
+            while(size--)
+            {
+                Node* t=q.front();
+                q.pop();
+                if(t->left!=NULL)
+                {
+                    q.push(t->left);
+                }
+                if(t->right!=NULL)
+                {
+                    q.push(t->right);
+                }
+                l.push_back(t->data);
+            }
+            if(c%2==0)
+            {
+                reverse(l.begin(),l.end());
+            }
+            c++;
+            for(auto i:l)
+            {
+                ans.push_back(i);
+            }
+        }
+        return ans;
+    	
+    }
+

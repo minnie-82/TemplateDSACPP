@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+/*
+Bottom View of Binary tree
+We can traverse the tree line by line vertically. At each line the element appearing at the last will be considered as a bottom view for that line. We can use Level Order Navigation for this to keep track for the last element in each line. 
+
+Time Complexity: O( N logN ), N is number of nodes in tree, since we need to traverse through each node of the tree for once in order to implement a level order traversal , also the height of the tree is logN .
+Space Complexity: O(N), N is number of nodes in tree. With each traversal on a level, we need to maintain a queue of pairs that will contain nodes and corresponding +ve or -ve value.
+ */
+
+
+struct Node{
+    int data;
+    struct Node *left, *right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+    
+    
+};
+  vector <int> bottomView(Node *root) {
+        // Your Code Here
+        
+        vector<int> ans;
+        
+        map<int,int>m;
+        queue<pair<Node*,int>>q;
+        q.push({root,0});
+        
+        while(!q.empty())
+        {
+            auto p=q.front();
+            q.pop();
+            
+            Node *t=p.first;
+            int l=p.second;
+            
+            m[l]=t->data;
+            
+            if(t->left!=NULL)
+            {
+                q.push({t->left,l-1});
+            }
+              
+            if(t->right!=NULL)
+            {
+                q.push({t->right,l+1});
+            }
+        }
+        for(auto i:m)
+        {
+            ans.push_back(i.second);
+        }
+        return ans;
+    }
+    
+
+int main() {
+    // Write C++ code here
+   struct Node *root=new Node(10);
+    root->left=new Node(20);
+    root->right=new Node(30);
+    root->left->left=new Node(40);
+   root->left->right=new Node(60);
+   
+    
+    
+     vector<int> ans=bottomView(root);
+     cout<<"Bottom View of Binary Tree: ";
+     for(auto i: ans)
+     {
+         cout<<i<<" ";
+     }
+
+    return 0;
+}

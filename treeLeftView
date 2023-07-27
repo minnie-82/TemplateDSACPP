@@ -1,0 +1,113 @@
+#include <bits/stdc++.h>
+using namespace std;
+/* LEFT VIEW OF BINARY TREE
+
+APPROACH 1: USING LEVEL ORDER TRAVERSAL
+The idea is to use simple iterative approach. We can traverse level by level and in each level choose the first node. 
+Time Complexity: O(N) since, we have to process all the nodes , N=size of the binary tree
+Space Complexity: O(N) auxiliary space to store all the nodes
+
+
+APPROACH 2: USING RECURSION
+The idea is to use recursion. We can traverse the tree in a preorder manner and maintain the maximum level visited till the current node. If the current level is more than the maximum level visited till now, then the current node is the first node of the current level, and we print it and max_level will be changed to the current level.
+ 
+ Time Complexity:The time complexity of the above solution is O(n), where n is the total number of nodes in the binary tree.
+Space Complexity: The program requires O(h) extra space for the call stack, where h is the height of the tree.*/
+
+
+struct Node{
+    int data;
+    struct Node *left, *right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+    
+    
+};
+
+//APPROACH 1:
+ vector<int> leftView(Node *root)
+{
+   // Your code here
+     vector<int> ans;
+     if(root==NULL)
+     {
+         return ans;
+     }
+       queue<Node *> q;
+       
+       q.push(root);
+       
+       while(!q.empty())
+       {
+           int size=q.size();
+           
+           for(int i=0;i<size;i++)
+           {
+               Node *t=q.front();
+               
+               q.pop();
+               if(i==0)
+               {
+                   ans.push_back(t->data);
+               }
+               
+               if(t->left)
+               {
+                   q.push(t->left);
+               }
+                if(t->right)
+               {
+                   q.push(t->right);
+               }
+           }
+       }
+       return ans;
+}
+
+
+//APPROACH 2:
+   void recursion(Node *root, int level, vector<int> &res)
+    {
+        if(root==NULL) return ;
+        if(res.size()==level) res.push_back(root->data);
+        recursion(root->left, level+1, res);
+        recursion(root->right, level+1, res);
+    }
+    
+    vector<int> leftSideView(Node *root) {
+        vector<int> res;
+        recursion(root, 0, res);
+        return res;
+    }
+
+int main() {
+    // Write C++ code here
+   struct Node *root=new Node(10);
+    root->left=new Node(20);
+    root->right=new Node(30);
+    root->left->left=new Node(40);
+   root->left->right=new Node(60);
+   
+    
+    
+     vector<int> ans=leftView(root);
+     cout<<"Left View of Binary Tree: ";
+     for(auto i: ans)
+     {
+         cout<<i<<" ";
+     }
+
+   vector<int> res=leftSideView(root);
+     cout<<"\nLeft View of Binary Tree approach 2: ";
+     for(auto i: res)
+     {
+         cout<<i<<" ";
+     }
+
+    return 0;
+}

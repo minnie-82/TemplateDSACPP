@@ -1,0 +1,103 @@
+//recursive
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+
+    bool isSymmm(TreeNode* root1, TreeNode* root2)
+    {
+        if(root1==NULL || root2==NULL)
+        {
+            return root1==root2;
+        }
+
+       return ( root1->val==root2->val)  && isSymmm(root1->left,root2->right) && isSymmm(root1->right,root2->left);
+       
+    }
+    bool isSymmetric(TreeNode* root) {
+        if(root==NULL)
+        {
+            return true;
+        }
+
+        return isSymmm(root->left,root->right);    
+    }
+};
+
+
+//iterative 0(n) O(n)
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+
+   
+    bool isSymmetric(TreeNode* root) {
+        if(root==NULL)
+        {
+            return true;
+        }
+
+         queue<TreeNode*> q;
+         q.push(root);
+         q.push(root);
+
+         TreeNode* root1,*root2;
+
+         while(!q.empty())
+         {
+            root1=q.front();
+            q.pop();
+            root2=q.front();
+            q.pop();
+            
+            
+            if(root1->val!=root2->val)
+            {
+                return false;
+            }
+             
+            if(root1->left && root2->right)
+            {
+                q.push(root1->left);
+                q.push(root2->right);
+            }
+            else if(root1->left || root2->right)
+            {
+                return false;
+            }
+
+
+             if(root1->right && root2->left)
+            {
+                q.push(root1->right);
+                q.push(root2->left);
+            }
+            else if(root1->right || root2->left)
+            {
+                return false;
+            }
+
+             }
+             return true;
+    }
+};

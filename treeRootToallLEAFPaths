@@ -1,0 +1,57 @@
+//GFG
+//O(N) O(N)
+void pre(Node *root, vector<vector<int>> &ans,vector<int> v)
+ {
+     if(root==NULL)
+     {
+         return;
+     }
+     
+     if(root->left==NULL && root->right==NULL)
+     {
+         v.push_back(root->data);
+         ans.push_back(v);
+         return;
+     }
+     v.push_back(root->data);
+     pre(root->left,ans,v);
+     pre(root->right,ans,v);
+     
+ }
+vector<vector<int>> Paths(Node* root)
+{
+    // Code here
+    vector<vector<int>> ans;
+    vector<int>v;
+    pre(root,ans,v);
+    return ans;
+}
+
+//Leetcode
+class Solution {
+public:
+   void pre(TreeNode* root, vector<string> &s,string v )
+   {
+          if(root==NULL)
+          {
+              return;
+          }
+          if(root->left==NULL && root->right==NULL)
+          {
+              v+=to_string(root->val);
+              s.push_back(v);
+              return;
+          }
+          
+              v+=to_string(root->val) + "->";
+              pre(root->left, s,v);
+              pre(root->right,s,v);
+   }
+    vector<string> binaryTreePaths(TreeNode* root) {
+        
+        vector<string> s;
+        string v;
+        pre(root,s,v);
+        return s;
+    }
+};
